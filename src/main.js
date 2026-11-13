@@ -1,60 +1,74 @@
-import './style.css'
-import heroImg from './assets/hero.png'
-import javascriptLogo from './assets/javascript.svg'
-import viteLogo from './assets/vite.svg'
-import { setupCounter } from './counter.js'
 
-document.querySelector('#app').innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${javascriptLogo}" class="framework" alt="JavaScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.js</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+import { fetchEmployees } from "./js/api.js";
+import { displayEmployees } from "./js/employees.js";
+import {
+  getSavedEmployees,
+  saveEmployees
+} from "./js/storage.js";
 
-<div class="ticks"></div>
+let allEmployees = [];
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-          <img class="button-icon" src="${javascriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
+async function initApp() {
+  const employeeList = document.getElementById("employee-list");
 
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
+  try {
+    employeeList.innerHTML = "<p>Loading employees...</p>";
 
-setupCounter(document.querySelector('#counter'))
+    // Load saved employees first
+    allEmployees = getSavedEmployees();
+
+    // Fetch from API only if no saved employees exist
+    if (allEmployees.length === 0) {
+      allEmployees = await fetchEmployees();
+      saveEmployees(allEmployees);
+    }
+
+    const departments = [
+      ...new Set(allEmployees.map(employee => employee.department))
+    ];
+
+    const departmentFilter = document.getElementById("department-filter");
+
+    departments.forEach(department => {
+      const option = document.createElement("option");
+      option.value = department;
+      option.textContent = department;
+      departmentFilter.appendChild(option);
+    });
+
+    displayEmployees(allEmployees);
+
+    document.getElementById("search-input")
+      .addEventListener("input", filterEmployees);
+
+    departmentFilter.addEventListener("change", filterEmployees);
+
+    document.getElementById("sort-select")
+      .addEventListener("change", filterEmployees);
+
+  } catch (error) {
+    employeeList.innerHTML =
+      "<p>Unable to load employees. Please refresh the page.</p>";
+  }
+}
+
+function filterEmployees() {
+  const search = document.getElementById("search-input").value.toLowerCase();
+  const department = document.getElementById("department-filter").value;
+  const sort = document.getElementById("sort-select").value;
+
+  let filtered = allEmployees.filter(employee => {
+    return employee.name.toLowerCase().includes(search) &&
+      (department === "all" || employee.department === department);
+  });
+
+  filtered.sort((a, b) =>
+    sort === "name-asc"
+      ? a.name.localeCompare(b.name)
+      : b.name.localeCompare(a.name)
+  );
+
+  displayEmployees(filtered);
+}
+
+initApp();
