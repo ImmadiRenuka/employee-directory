@@ -2,53 +2,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Interactive Employee Directory" />
-  <title>Employee Directory</title>
-  <link rel="stylesheet" href="/src/css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Employee Directory Dashboard">
+  <title>PeopleHub | Employee Directory</title>
+  <link rel="stylesheet" href="/src/css/style.css">
 </head>
+
 <body>
   <header class="header">
-    <h1>Employee Directory</h1>
+    <div class="brand">
+      <div class="brand-logo">P</div>
+      <div>
+        <h1>PeopleHub</h1>
+        <span>People Management Portal</span>
+      </div>
+    </div>
+
     <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
   </header>
 
   <main class="container">
-    <section class="toolbar">
-      <button id="favorites-toggle" aria-pressed="false">
-           ❤️ Show Favorites
-         </button>
-      <input
-        type="search"
-        id="search-input"
-        placeholder="Search employees by name..."
-        aria-label="Search employees"
-      />
 
-      <select id="department-filter" aria-label="Filter by department">
-        <option value="all">All Departments</option>
-      </select>
-
-      <select id="sort-select" aria-label="Sort employees">
-        <option value="name-asc">Name: A to Z</option>
-        <option value="name-desc">Name: Z to A</option>
-      </select>
+    <section class="welcome-section">
+      <div>
+        <span class="eyebrow">YOUR WORKSPACE</span>
+        <h2>Meet your people.</h2>
+        <p>Discover, connect and manage your team in one place.</p>
+      </div>
+      <div class="welcome-icon">👥</div>
     </section>
 
     <section class="directory-section">
+
       <div class="section-heading">
-        <h2>Our Employees</h2>
-        <p id="employee-count">Loading employees...</p>
+        <div>
+          <h2>Employee Directory</h2>
+          <p>Explore your organization and find your colleagues.</p>
+        </div>
+        <span id="employee-count">Loading employees...</span>
+      </div>
+
+      <div class="toolbar">
+        <input
+          type="search"
+          id="search-input"
+          placeholder="Search by employee name..."
+          aria-label="Search employees"
+        >
+
+        <select id="department-filter" aria-label="Filter by department">
+          <option value="all">All Departments</option>
+        </select>
+
+        <select id="sort-select" aria-label="Sort employees">
+          <option value="name-asc">Name: A to Z</option>
+          <option value="name-desc">Name: Z to A</option>
+        </select>
+
+        <button id="favorites-toggle" aria-pressed="false">
+          ❤️ Show Favorites
+        </button>
       </div>
 
       <div id="employee-list" class="employee-grid" aria-live="polite">
         <p>Loading employees...</p>
       </div>
+
     </section>
   </main>
 
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>
-
