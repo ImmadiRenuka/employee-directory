@@ -126,3 +126,109 @@ body {
   font-size: 22px;
   cursor: pointer;
 }
+
+#favorites-toggle {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #263a5b;
+  color: white;
+  cursor: pointer;
+}
+
+.dark-mode {
+  background: #151b2b;
+  color: #f5f5f5;
+}
+
+.dark-mode .header {
+  background: #101625;
+}
+
+.dark-mode .employee-card {
+  background: #263248;
+  color: white;
+}
+
+.dark-mode .employee-card h3,
+.dark-mode .employee-card p {
+  color: #f5f5f5;
+}
+
+.dark-mode .toolbar input,
+.dark-mode .toolbar select {
+  background: #263248;
+  color: white;
+  border-color: #46536a;
+}
+
+.dark-mode #favorites-toggle {
+  background: #526b9b;
+  color: white;
+}
+
+.loader {
+  width: 45px;
+  height: 45px;
+  border: 5px solid #ddd;
+  border-top: 5px solid #263a5b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 30px auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  text-align: center;
+  padding: 40px 20px;
+  background: white;
+  border-radius: 12px;
+  grid-column: 1 / -1;
+}
+
+.error-message button {
+  margin-top: 15px;
+  padding: 12px 22px;
+  background: #263a5b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.dark-mode .error-message {
+  background: #263248;
+  color: white;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+    margin: 20px auto;
+  }
+
+  .employee-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-card {
+    padding: 18px;
+  }
+
+  .header {
+    padding: 18px 15px;
+  }
+
+  .header h1 {
+    font-size: 18px;
+  }
+
+  #favorites-toggle {
+    width: 100%;
+  }
+}
